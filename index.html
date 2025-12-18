@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>الاستعلام عن درجه الطالب</title>
+
+    <!-- Import Cairo Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Force full height and disable default scroll on body to prevent double scrollbars */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* We will scroll inside the wrapper */
+            background-color: #0d1b4c;
+            /* Fallback */
+        }
+
+        /* Fixed Background Layer */
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d1b4c, #1c4dc5, #0d1b4c);
+            z-index: 1;
+        }
+
+        /* Floating Circles (in background) */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .circles div {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .circles div:nth-child(1) {
+            width: 70px;
+            height: 70px;
+            left: 10%;
+            bottom: -20px;
+            animation-delay: 0s;
+        }
+
+        .circles div:nth-child(2) {
+            width: 110px;
+            height: 110px;
+            left: 70%;
+            bottom: -30px;
+            animation-delay: 5s;
+        }
+
+        .circles div:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 40%;
+            bottom: -15px;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(0.6);
+            }
+
+            50% {
+                transform: translateY(-80vh) scale(1.2);
+            }
+
+            100% {
+                transform: translateY(0) scale(0.6);
+            }
+        }
+
+        /* Scrollable Content Wrapper */
+        .content-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            /* Use flex to center */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Center vertically */
+            overflow-y: auto;
+            /* Enable vertical scroll */
+            overflow-x: hidden;
+            /* Disable horizontal scroll */
+            z-index: 2;
+            /* Above background */
+            padding: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            width: 90%;
+            /* Use percentage to fit any screen */
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 25px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            animation: fadeIn 1s ease;
+            margin: auto;
+            /* Helps with centering in scroll view */
+            flex-shrink: 0;
+            /* Prevent crushing */
+            transition: max-width 0.5s ease-in-out;
+        }
+
+        #resultCard {
+            max-width: 900px;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(.85);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logo {
+            width: 40%;
+            max-width: 90px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            /* Slightly smaller for mobile safety */
+            font-weight: 700;
+            color: #fff;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            outline: none;
+            text-align: right;
+            /* RTL support */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #ffc400, #ff9800);
+            color: #222;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 12px;
+            min-height: 40px;
+            font-size: 15px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.28);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        /* Tiny Screen Adjustment */
+        @media (max-width: 320px) {
+            .card {
+                padding: 15px;
+                width: 95%;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .logo {
+                width: 40%;
+            }
+        }
+
+        /* Result Card Styles (Merged) */
+        .student-info {
+            text-align: right;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .student-info p {
+            margin: 5px 0;
+        }
+
+        .student-info span {
+            font-weight: bold;
+            color: #ffc400;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            color: #fff;
+            font-size: 15px;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        th {
+            background-color: rgba(255, 196, 0, 0.9);
+            color: #111;
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-btn:hover {
+            background: #ffc400;
+            color: #000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. Fixed Background -->
+    <div class="fixed-background">
+        <div class="circles">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- 2. Scrollable Overlay -->
+    <div class="content-wrapper">
+        <div id="searchCard" class="card">
+            <a href="https://ibb.co/cKc5Pm4R" target="_blank">
+                <img class="logo" src="https://i.ibb.co/ZR6s3Zqv/457615888-933036922172497-1073708694902476499-n.jpg"
+                    alt="لوجو المدرسة">
+            </a>
+            <h2>البحث عن النتيجة</h2>
+            <select id="stage" onchange="updateGrades()">
+                <option value="" disabled selected>اختر المرحلة</option>
+                <option value="primary">الابتدائية</option>
+                <option value="preparatory">الاعدادية</option>
+                <option value="secondary">الثانوية</option>
+            </select>
+            <select id="grade">
+                <option value="" disabled selected>اختر الصف</option>
+            </select>
+            <input id="nid" type="text" placeholder="ادخل الرقم القومي">
+            <button onclick="searchNow()">بحث</button>
+            <div id="result" class="result">أدخل الرقم القومي باللغه الإنجليزيه ثم اضغط بحث.</div>
+        </div>
+
+        <!-- Result Card (Hidden by default) -->
+        <div id="resultCard" class="card hidden">
+            <h2>شهادة درجات الطالب</h2>
+
+            <div class="student-info">
+                <p>الاسم: <span>محمد أحمد محمود</span></p>
+                <p>الصف: <span id="resGrade"></span></p>
+                <p>الرقم القومي: <span id="student-nid"></span></p>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المادة</th>
+                            <th>لغة عربية</th>
+                            <th>لغة إنجليزية</th>
+                            <th>رياضيات</th>
+                            <th>علوم</th>
+                            <th>دراسات</th>
+                            <th>المجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:bold; background:rgba(0,0,0,0.1);">العظمى</td>
+                            <td>80</td>
+                            <td>60</td>
+                            <td>60</td>
+                            <td>40</td>
+                            <td>40</td>
+                            <td>280</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold; background:rgba(0,0,0,0.1);">الصغرى</td>
+                            <td>40</td>
+                            <td>30</td>
+                            <td>30</td>
+                            <td>20</td>
+                            <td>20</td>
+                            <td>140</td>
+                        </tr>
+                        <tr style="background: rgba(255, 196, 0, 0.15); font-weight: bold;">
+                            <td style="background:rgba(255, 196, 0, 0.3);">الدرجه</td>
+                            <td>75</td>
+                            <td>55</td>
+                            <td>58</td>
+                            <td>38</td>
+                            <td>39</td>
+                            <td>265</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div onclick="goBack()" class="back-btn">رجوع</div>
+        </div>
+    </div>
+
+    <script>
+        const gradesList = {
+            primary: [
+                "الاول الابتدائي", "الثاني الابتدائي", "الثالث الابتدائي",
+                "الرابع الابتدائي", "الخامس الابتدائي", "السادس الابتدائي"
+            ],
+            preparatory: [
+                "الاول الاعدادي", "الثاني الاعدادي", "الثالث الاعدادي"
+            ],
+            secondary: [
+                "الاول الثانوي"
+            ]
+        };
+
+        function updateGrades() {
+            const stage = document.getElementById('stage').value;
+            const gradeSelect = document.getElementById('grade');
+            gradeSelect.innerHTML = '<option value="" disabled selected>اختر الصف</option>';
+
+            if (gradesList[stage]) {
+                gradesList[stage].forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g;
+                    opt.textContent = g;
+                    gradeSelect.appendChild(opt);
+                });
+            }
+        }
+
+        function searchNow() {
+            let id = document.getElementById('nid').value.trim();
+            let gradeSelect = document.getElementById('grade');
+            let r = document.getElementById('result');
+
+            if (id === '') {
+                r.innerHTML = 'من فضلك أدخل الرقم القومي بالإنجليزيه';
+                return;
+            }
+
+            // Show loading
+            r.innerHTML = 'جاري البحث...';
+
+            setTimeout(() => {
+                // Populate result data
+                document.getElementById('student-nid').textContent = id;
+                document.getElementById('resGrade').textContent = gradeSelect.value || "غير محدد";
+
+                // Toggle visibility
+                document.getElementById('searchCard').classList.add('hidden');
+                document.getElementById('resultCard').classList.remove('hidden');
+
+                // Reset search message
+                r.innerHTML = 'أدخل الرقم القومي باللغه الإنجليزيه ثم اضغط بحث.';
+            }, 800);
+        }
+
+        function goBack() {
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('searchCard').classList.remove('hidden');
+        }
+    </script>
+    <!-- 3. Elegant Footer -->
+    <footer style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        text-align: center;
+        padding: 8px 0;
+        font-size: 14px;
+        color: #fff;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        z-index: 10;
+    ">
+        © جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2025
+        <div style="
+            margin-top: 2px;
+            font-size: 11px;
+            color: #ffe28a;
+            font-weight: bold;
+        ">
+            تحت إشراف: مس / ماجده — مستر / سيد
+        </div>
+    </footer>
+
+
+</body>
+
+</html>
