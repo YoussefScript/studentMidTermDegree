@@ -301,20 +301,87 @@
             box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shine Effect for Button */
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::after {
+            left: 100%;
+            transition: 0.7s;
+        }
+
+        button:hover {
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+            transform: translateY(-2px);
         }
 
         button:active {
             transform: scale(0.98);
         }
 
+        /* Input Focus Glow */
+        input:focus,
+        select:focus {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Shake Animation for Invalid Input */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+                border-color: #f87171;
+            }
+
+            50% {
+                transform: translateX(5px);
+                border-color: #f87171;
+            }
+
+            75% {
+                transform: translateX(-5px);
+                border-color: #f87171;
+            }
+        }
+
+        .shake-animation {
+            animation: shake 0.3s ease-in-out;
+            border-color: #f87171 !important;
+        }
+
         .result {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 1rem;
+            padding: 0.5rem;
+            /* Remove box style */
+            background: transparent;
+            border: none;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .result:empty {
+            display: none;
+            margin: 0;
+            padding: 0;
         }
 
         /* Result Tables & Responsive Code */
@@ -392,18 +459,36 @@
         @media screen and (max-width: 768px) {
             .content-wrapper {
                 padding: 10px;
-                padding-top: 20px;
+                padding-top: 10px;
+                justify-content: flex-start;
+                /* Fix "too much space up there" */
+                height: auto;
+                min-height: 100vh;
             }
 
             .card {
                 padding: 15px;
                 width: 100%;
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+                margin-top: 20px;
             }
 
             h2 {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
+                /* Force solid color on mobile for visibility */
+                background: none;
+                -webkit-text-fill-color: #fff;
+                color: #fff;
+            }
+
+            /* Compact Inputs/Buttons for "container that contains everything" */
+            input,
+            select,
+            button {
+                padding: 12px;
+                font-size: 0.9rem;
                 margin-bottom: 0.8rem;
             }
 
@@ -414,24 +499,37 @@
             }
 
             .student-info {
-                padding: 0.8rem;
-                margin-bottom: 1rem;
+                padding: 0.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            /* Enhance Graphics on Mobile */
+            .circles div {
+                opacity: 0.4;
+                /* Make them more visible */
+                bottom: -50px;
+                /* Start higher up so they are seen sooner */
+            }
+
+            .fixed-background {
+                background-size: 200% 200%;
+                /* More dynamic gradient */
             }
 
             /* Restore Standard Table Layout on Mobile */
-            /* We need to ensure the container can scroll if it still overflows, though we try to fit it */
             .table-container {
-                overflow-x: auto;
+                overflow-x: visible;
+                /* Try to avoid scroll */
+                width: 100%;
                 border-radius: 8px;
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
-                /* Golden Glow */
             }
 
             table {
                 width: 100%;
-                min-width: 300px;
-                /* Ensure it doesn't get too squashed */
+                table-layout: fixed;
+                /* Force fixed width */
             }
 
             /* Reset display to table-row/cell */
@@ -446,7 +544,6 @@
 
             thead {
                 display: table-header-group;
-                /* Show header again */
             }
 
             tr {
@@ -460,23 +557,36 @@
             /* Compact Cells */
             th,
             td {
-                padding: 4px 2px;
-                /* Very tight padding */
+                padding: 4px 1px;
+                /* Minimal padding */
                 font-size: 0.7rem;
-                /* Small text */
                 white-space: nowrap;
-                /* Prevent wrapping if possible, or let it scroll */
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            /* Slightly larger for Subject to be readable */
+            /* Column Sizing */
+            /* Subject */
             td:first-child,
             th:first-child {
                 text-align: right;
-                padding-right: 5px;
-                width: 30%;
-                /* Give subject a bit more space */
+                padding-right: 4px;
+                width: 35%;
+                /* Subject gets most space */
                 white-space: normal;
-                /* Allow subject to wrap */
+                /* Allow wrapping */
+                line-height: 1.1;
+            }
+
+            /* Max/Min/Student Cols - Distribute remaining 65% */
+            th:nth-child(2),
+            td:nth-child(2),
+            th:nth-child(3),
+            td:nth-child(3),
+            th:last-child,
+            td:last-child {
+                width: 21%;
+                text-align: center;
             }
 
             /* Restore visibility of all columns */
@@ -504,6 +614,10 @@
             .student-score {
                 color: #fbbf24;
                 text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+            }
+
+            .total-row td {
+                font-size: 0.75rem;
             }
         }
 
@@ -606,12 +720,12 @@
             </select>
             <input id="nid" type="text" placeholder="ادخل الرقم القومي">
             <button onclick="searchNow()">بحث</button>
-            <div id="result" class="result">أدخل الرقم القومي باللغه الإنجليزيه ثم اضغط بحث.</div>
+            <div id="result" class="result"></div>
         </div>
 
         <!-- Result Card -->
         <div id="resultCard" class="card hidden">
-            <h2>شهادة درجات الطالب</h2>
+            
 
             <div class="student-info">
                 <p><span>الاسم:</span> محمد أحمد محمود</p>
@@ -624,53 +738,53 @@
                     <thead>
                         <tr>
                             <th>المادة</th>
-                            <th>الدرجة العظمى</th>
-                            <th>الدرجة الصغرى</th>
-                            <th>درجة الطالب</th>
+                            <th>العظمى</th>
+                            <th>الصغرى</th>
+                            <th>الدرجه</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td data-label="المادة">لغة عربية</td>
-                            <td data-label="الدرجة العظمى">80</td>
-                            <td data-label="الدرجة الصغرى">40</td>
-                            <td data-label="درجة الطالب" class="student-score">75</td>
+                            <td data-label="العظمى">80</td>
+                            <td data-label="الصغرى">40</td>
+                            <td data-label="الطالب" class="student-score">75</td>
                         </tr>
                         <tr>
                             <td data-label="المادة">لغة إنجليزية</td>
-                            <td data-label="الدرجة العظمى">60</td>
-                            <td data-label="الدرجة الصغرى">30</td>
-                            <td data-label="درجة الطالب" class="student-score">55</td>
+                            <td data-label="العظمى">60</td>
+                            <td data-label="الصغرى">30</td>
+                            <td data-label="الطالب" class="student-score">55</td>
                         </tr>
                         <tr>
                             <td data-label="المادة">رياضيات</td>
-                            <td data-label="الدرجة العظمى">60</td>
-                            <td data-label="الدرجة الصغرى">30</td>
-                            <td data-label="درجة الطالب" class="student-score">58</td>
+                            <td data-label="العظمى">60</td>
+                            <td data-label="الصغرى">30</td>
+                            <td data-label="الطالب" class="student-score">58</td>
                         </tr>
                         <tr>
                             <td data-label="المادة">علوم</td>
-                            <td data-label="الدرجة العظمى">40</td>
-                            <td data-label="الدرجة الصغرى">20</td>
-                            <td data-label="درجة الطالب" class="student-score">38</td>
+                            <td data-label="العظمى">40</td>
+                            <td data-label="الصغرى">20</td>
+                            <td data-label="الطالب" class="student-score">38</td>
                         </tr>
                         <tr>
                             <td data-label="المادة">دراسات</td>
-                            <td data-label="الدرجة العظمى">40</td>
-                            <td data-label="الدرجة الصغرى">20</td>
-                            <td data-label="درجة الطالب" class="student-score">39</td>
+                            <td data-label="العظمى">40</td>
+                            <td data-label="الصغرى">20</td>
+                            <td data-label="الطالب" class="student-score">39</td>
                         </tr>
                         <tr class="total-row">
-                            <td data-label="المادة">المجموع الكلي</td>
-                            <td data-label="الدرجة العظمى">280</td>
-                            <td data-label="الدرجة الصغرى">140</td>
-                            <td data-label="درجة الطالب" class="student-score">265</td>
+                            <td data-label="المادة">المجموع</td>
+                            <td data-label="العظمى">280</td>
+                            <td data-label="الصغرى">140</td>
+                            <td data-label="الطالب" class="student-score">265</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div onclick="goBack()" class="back-btn">رجوع</div>
+            <!-- Back Button Removed -->
         </div>
     </div>
 
@@ -705,17 +819,30 @@
         }
 
         function searchNow() {
-            let id = document.getElementById('nid').value.trim();
+            let idInput = document.getElementById('nid');
+            let id = idInput.value.trim();
             let gradeSelect = document.getElementById('grade');
             let r = document.getElementById('result');
 
+            // Reset validation style
+            idInput.style.borderColor = "rgba(255, 255, 255, 0.1)";
+            idInput.classList.remove('shake-animation');
+
             if (id === '') {
-                r.innerHTML = 'من فضلك أدخل الرقم القومي بالإنجليزيه';
+                // Visual validation only
+                idInput.style.borderColor = "#f87171"; // Red border
+                idInput.classList.add('shake-animation');
+
+                // Remove shake class after animation ends to allow re-trigger
+                setTimeout(() => {
+                    idInput.classList.remove('shake-animation');
+                }, 500);
                 return;
             }
 
             // Show loading
-            r.innerHTML = 'جاري البحث...';
+            r.style.display = 'block'; // Make sure it's visible for loading
+            r.innerHTML = '...'; // Minimal loading indicator or graphic
 
             setTimeout(() => {
                 // Populate result data
@@ -727,19 +854,16 @@
                 document.getElementById('resultCard').classList.remove('hidden');
 
                 // Reset search message
-                r.innerHTML = 'أدخل الرقم القومي باللغه الإنجليزيه ثم اضغط بحث.';
+                r.innerHTML = ''; // Clear loading
             }, 800);
         }
 
-        function goBack() {
-            document.getElementById('resultCard').classList.add('hidden');
-            document.getElementById('searchCard').classList.remove('hidden');
-        }
+        /* function goBack() removed */
     </script>
 
     <!-- Footer -->
     <footer>
-        © جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2025
+        <span style="font-size: 0.9rem;">© جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2025</span>
         <div style="margin-top: 4px; font-size: 0.8rem; color: var(--accent-color);">
             تحت إشراف: مس / ماجده — مستر / سيد
         </div>
