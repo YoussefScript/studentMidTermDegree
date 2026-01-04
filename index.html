@@ -678,9 +678,10 @@
                 padding: 20px;
             }
         }
+
         .logo {
             margin: 0px;
-            border-radius: 50% ;
+            border-radius: 50%;
             padding: 0px;
         }
     </style>
@@ -723,14 +724,14 @@
             <select id="grade">
                 <option value="" disabled selected>اختر الصف</option>
             </select>
-            <input id="nid" type="text" placeholder="ادخل الرقم القومي">
+            <input id="nid" type="text" placeholder="ادخل الرقم القومي" maxlength="14" minlength="14">
             <button onclick="searchNow()">بحث</button>
             <div id="result" class="result"></div>
         </div>
 
         <!-- Result Card -->
         <div id="resultCard" class="card hidden">
-            
+
 
             <div class="student-info">
                 <p><span>الاسم:</span> محمد أحمد محمود</p>
@@ -827,20 +828,36 @@
             let idInput = document.getElementById('nid');
             let id = idInput.value.trim();
             let gradeSelect = document.getElementById('grade');
+            let grade = gradeSelect.value;
             let r = document.getElementById('result');
 
             // Reset validation style
             idInput.style.borderColor = "rgba(255, 255, 255, 0.1)";
             idInput.classList.remove('shake-animation');
+            gradeSelect.style.borderColor = "rgba(255, 255, 255, 0.1)";
+            gradeSelect.classList.remove('shake-animation');
+
+            let isValid = true;
 
             if (id === '') {
-                // Visual validation only
+                // Visual validation for ID
                 idInput.style.borderColor = "#f87171"; // Red border
                 idInput.classList.add('shake-animation');
+                isValid = false;
+            }
 
+            if (grade === '') {
+                // Visual validation for Grade
+                gradeSelect.style.borderColor = "#f87171"; // Red border
+                gradeSelect.classList.add('shake-animation');
+                isValid = false;
+            }
+
+            if (!isValid) {
                 // Remove shake class after animation ends to allow re-trigger
                 setTimeout(() => {
                     idInput.classList.remove('shake-animation');
+                    gradeSelect.classList.remove('shake-animation');
                 }, 500);
                 return;
             }
@@ -868,9 +885,9 @@
 
     <!-- Footer -->
     <footer>
-        <span style="font-size: 1.2rem;">© جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2026</span>
-        <div style="margin-top: 4px; font-size: 1.0rem; color: var(--accent-color);">
-            تحت إشراف: مس / ماجده — مستر / سيد
+        <span style="font-size: 1.4rem; font-weight: 900;">© جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2026</span>
+        <div style="margin-top: 4px; font-size: 1.2rem; color: var(--accent-color);">
+            إشراف: مس / ماجده — مستر / سيد
         </div>
     </footer>
 
