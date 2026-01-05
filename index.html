@@ -225,7 +225,9 @@
         }
 
         #resultCard {
-            max-width: 900px;
+            max-width: 100%;
+            /* Make it almost full width on big screens */
+            width: 100%;
         }
 
         @keyframes slideUp {
@@ -385,30 +387,65 @@
         }
 
         /* Result Tables & Responsive Code */
+        /* Updated Student Info (Unified Box Style) */
         .student-info {
-            text-align: right;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) !important;
+            /* FORCE 4 Columns always */
+            gap: 1px;
+            /* Small gap for internal borders */
             margin-bottom: 2rem;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            /* Border color between items */
+            padding: 1px;
+            /* Border width */
             border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            min-width: 800px;
+            /* Force it WIDE so it scrolls, never wraps */
+            width: max-content;
+            /* Ensure it takes up space */
         }
 
-        .student-info p {
-            margin: 0.5rem 0;
-            font-size: 1.1rem;
+        .info-group {
+            background: rgba(0, 0, 0, 0.3);
+            /* Item background */
+            /* border removed */
+            /* border-radius removed */
             display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 0.5rem;
+            flex-direction: column;
+            width: auto;
+            /* Allow natural width */
         }
 
-        .student-info p:last-child {
-            border-bottom: none;
-        }
-
-        .student-info span {
+        .info-label {
+            background: #00897b;
+            color: #fff;
+            padding: 8px 10px;
+            font-size: 0.95rem;
             font-weight: bold;
-            color: var(--accent-color);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .info-value {
+            padding: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.2);
+            /* Slightly darker for contrast */
+            white-space: nowrap;
+            /* Keep values on one line */
+        }
+
+        /* Responsive: Stack on mobile */
+        @media screen and (max-width: 600px) {
+            .student-info {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Responsive Table */
@@ -435,8 +472,9 @@
         }
 
         th {
-            background: rgba(251, 191, 36, 0.9);
-            color: #111;
+            background: #00897b;
+            /* Teal */
+            color: #fff;
             font-weight: 700;
         }
 
@@ -455,169 +493,164 @@
             font-size: 1.1rem;
         }
 
-        /* Mobile Responsive View for Table */
+        /* Updated Table Stylings for Transposed View */
+        /* Updated Table Stylings for Transposed View */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding-bottom: 5px;
+
+            /* Hide Scrollbar Globally by default */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+        }
+
+        /* Hide Scrollbar Chrome/Safari/Webkit */
+        .table-container::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            /* Fit screen on desktop and big screens */
+            min-width: 100%;
+        }
+
+        th,
+        td {
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            /* Prevent wrapping generally for clean look */
+        }
+
+        /* Sticky Columns Removed */
+        th:first-child,
+        td:first-child {
+            position: static;
+            background: #00897b;
+            color: #fff;
+            font-weight: bold;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+
+        thead tr:first-child th {
+            background: #00897b;
+            color: #fff;
+        }
+
+        thead tr:nth-child(2) th {
+            background: #00695c;
+            color: #fff;
+        }
+
+        /* Total Column Styling */
+        .total-col {
+            background-color: #d32f2f !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .total-header {
+            background-color: #c62828 !important;
+            color: white !important;
+        }
+
+        tbody tr:nth-child(odd) td:not(:first-child) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Mobile Responsive View - Full Page Swipe */
+        /* Mobile Responsive View - Optimized Scroll & Centered */
         @media screen and (max-width: 768px) {
+
             .content-wrapper {
                 padding: 10px;
-                padding-top: 10px;
-                justify-content: flex-start;
-                /* Fix "too much space up there" */
-                height: auto;
-                min-height: 100vh;
+                padding-top: 40px;
+                padding-bottom: 120px;
+                display: block;
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 100vh;
+                box-sizing: border-box;
+                text-align: center;
+                /* Center layouts */
             }
 
-            .card {
+            /* Search Card: Centered */
+            #searchCard {
+                width: 90%;
+                max-width: 400px;
+                margin: 0 auto;
+                /* Centering */
+                display: inline-block;
+                /* Keeps it respecting text-align if needed, or block with auto margin */
+                white-space: normal;
+                /* Internal text center */
+                text-align: center;
+                vertical-align: top;
+            }
+
+            /* Result Card: Block with auto margin for safe centering */
+            #resultCard {
+                display: block;
+                /* Works best with text-align: right parent */
+                width: max-content;
+                /* Key fix: border wraps ALL content */
+                min-width: 100%;
+                /* At least screen width */
+                max-width: none;
+                /* Allow infinite growth */
+                margin: 0 auto;
+                /* Center if possible */
                 padding: 15px;
-                width: 100%;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-                margin-top: 20px;
+                white-space: normal;
+                direction: rtl;
+                box-sizing: border-box;
             }
 
-            h2 {
-                font-size: 1.2rem;
-                margin-bottom: 0.8rem;
-                /* Force solid color on mobile for visibility */
-                background: none;
-                -webkit-text-fill-color: #fff;
-                color: #fff;
-            }
-
-            /* Compact Inputs/Buttons for "container that contains everything" */
-            input,
-            select,
-            button {
-                padding: 12px;
-                font-size: 0.9rem;
-                margin-bottom: 0.8rem;
-            }
-
-            .student-info p {
-                font-size: 0.8rem;
-                padding-bottom: 0.3rem;
-                margin: 0.3rem 0;
-            }
-
-            .student-info {
-                padding: 0.5rem;
-                margin-bottom: 0.8rem;
-            }
-
-            /* Enhance Graphics on Mobile */
-            .circles div {
-                opacity: 0.4;
-                /* Make them more visible */
-                bottom: -50px;
-                /* Start higher up so they are seen sooner */
-            }
-
-            .fixed-background {
-                background-size: 200% 200%;
-                /* More dynamic gradient */
-            }
-
-            /* Restore Standard Table Layout on Mobile */
             .table-container {
-                overflow-x: visible;
-                /* Try to avoid scroll */
                 width: 100%;
-                border-radius: 8px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 0 15px rgba(251, 191, 36, 0.1);
+                overflow: visible;
+                flex: 1;
+                /* Take space */
             }
 
             table {
                 width: 100%;
-                table-layout: fixed;
-                /* Force fixed width */
+                /* min-width removed, let container dictate or content dictate */
             }
 
-            /* Reset display to table-row/cell */
-            table,
-            thead,
-            tbody,
-            th,
-            td,
-            tr {
-                display: revert;
-            }
-
-            thead {
-                display: table-header-group;
-            }
-
-            tr {
-                display: table-row;
-                background: transparent;
-                border: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            /* Compact Cells */
             th,
             td {
-                padding: 4px 1px;
-                /* Minimal padding */
-                font-size: 0.7rem;
+                padding: 12px;
+                font-size: 1rem;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                /* Keep rows single line => Forces Width */
             }
 
-            /* Column Sizing */
-            /* Subject */
-            td:first-child,
-            th:first-child {
-                text-align: right;
-                padding-right: 4px;
-                width: 35%;
-                /* Subject gets most space */
-                white-space: normal;
-                /* Allow wrapping */
-                line-height: 1.1;
+            /* Hide scrollbars */
+            ::-webkit-scrollbar {
+                display: none;
             }
 
-            /* Max/Min/Student Cols - Distribute remaining 65% */
-            th:nth-child(2),
-            td:nth-child(2),
-            th:nth-child(3),
-            td:nth-child(3),
-            th:last-child,
-            td:last-child {
-                width: 21%;
-                text-align: center;
-            }
-
-            /* Restore visibility of all columns */
-            td:nth-child(2),
-            td:nth-child(3) {
-                display: table-cell;
-            }
-
-            td:last-child {
-                display: table-cell;
-                text-align: center;
-                justify-self: auto;
-                background: transparent;
-                /* Remove the highlight background from previous step */
-                padding: 4px 2px;
-                border-radius: 0;
-            }
-
-            /* Add alternating row colors for better readability on small screens */
-            tbody tr:nth-child(odd) {
-                background: rgba(255, 255, 255, 0.02);
-            }
-
-            /* Graphic Enhancements */
-            .student-score {
-                color: #fbbf24;
-                text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
-            }
-
-            .total-row td {
-                font-size: 0.75rem;
+            * {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
         }
 
@@ -734,58 +767,36 @@
 
 
             <div class="student-info">
-                <p><span>الاسم:</span> محمد أحمد محمود</p>
-                <p><span>الصف:</span> <span id="resGrade" style="color:#fff;"></span></p>
-                <p><span>الرقم القومي:</span> <span id="student-nid" style="color:#fff;"></span></p>
+                <div class="info-group">
+                    <div class="info-label">اسم الطالب</div>
+                    <div class="info-value">محمد أحمد محمود</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">الرقم القومي</div>
+                    <div class="info-value" id="student-nid"></div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">الصف</div>
+                    <div class="info-value" id="resGrade"></div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">المدرسة</div>
+                    <div class="info-value">الشهيد عمرو شهاب</div>
+                </div>
             </div>
 
             <div class="table-container">
-                <table>
+                <table id="resultsTable">
                     <thead>
                         <tr>
                             <th>المادة</th>
                             <th>العظمى</th>
                             <th>الصغرى</th>
-                            <th>الدرجه</th>
+                            <th>الدرجة</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td data-label="المادة">لغة عربية</td>
-                            <td data-label="العظمى">80</td>
-                            <td data-label="الصغرى">40</td>
-                            <td data-label="الطالب" class="student-score">75</td>
-                        </tr>
-                        <tr>
-                            <td data-label="المادة">لغة إنجليزية</td>
-                            <td data-label="العظمى">60</td>
-                            <td data-label="الصغرى">30</td>
-                            <td data-label="الطالب" class="student-score">55</td>
-                        </tr>
-                        <tr>
-                            <td data-label="المادة">رياضيات</td>
-                            <td data-label="العظمى">60</td>
-                            <td data-label="الصغرى">30</td>
-                            <td data-label="الطالب" class="student-score">58</td>
-                        </tr>
-                        <tr>
-                            <td data-label="المادة">علوم</td>
-                            <td data-label="العظمى">40</td>
-                            <td data-label="الصغرى">20</td>
-                            <td data-label="الطالب" class="student-score">38</td>
-                        </tr>
-                        <tr>
-                            <td data-label="المادة">دراسات</td>
-                            <td data-label="العظمى">40</td>
-                            <td data-label="الصغرى">20</td>
-                            <td data-label="الطالب" class="student-score">39</td>
-                        </tr>
-                        <tr class="total-row">
-                            <td data-label="المادة">المجموع</td>
-                            <td data-label="العظمى">280</td>
-                            <td data-label="الصغرى">140</td>
-                            <td data-label="الطالب" class="student-score">265</td>
-                        </tr>
+                    <tbody id="resultsBody">
+                        <!-- Dynamic Content -->
                     </tbody>
                 </table>
             </div>
@@ -824,9 +835,176 @@
             }
         }
 
+        const subjectsData = {
+            primary: {
+                core: [
+                    { name: "لغة عربية", max: 100, min: 50 },
+                    { name: "رياضيات", max: 80, min: 40 },
+                    { name: "لغة إنجليزية", max: 60, min: 30 },
+                    { name: "علوم", max: 40, min: 20 },
+                    { name: "دراسات", max: 40, min: 20 }
+                ],
+                nonCore: [
+                    { name: "تربية دينية", max: 40, min: 20 },
+                    { name: "تكنولوجيا", max: 20, min: 10 },
+                    { name: "كت", max: 20, min: 10 }
+                ]
+            },
+            preparatory: {
+                core: [
+                    { name: "عربي", max: 40, min: 20 },
+                    { name: "انجليزي", max: 30, min: 15 },
+                    { name: "دراسات", max: 20, min: 10 },
+                    { name: "جبر", max: 15, min: 7.5 },
+                    { name: "هندسة", max: 15, min: 7.5 },
+                    { name: "علوم", max: 20, min: 10 }
+                ],
+                nonCore: [
+                    { name: "تربية فنية", max: 10, min: 5 },
+                    { name: "حاسب آلي", max: 10, min: 5 },
+                    { name: "تربية دينية", max: 20, min: 10 },
+                    { name: "مستوى 1", max: 25, min: 12.5 },
+                    { name: "مستوى 2", max: 20, min: 10 }
+                ]
+            },
+            secondary: {
+                core: [
+                    { name: "لغة عربية", max: 50, min: 25 },
+                    { name: "أجنبية 1", max: 50, min: 25 },
+                    { name: "أجنبية 2", max: 40, min: 20 },
+                    { name: "بحتة", max: 60, min: 30 },
+                    { name: "تطبيقية", max: 60, min: 30 },
+                    { name: "فيزياء", max: 60, min: 30 },
+                    { name: "كيمياء", max: 60, min: 30 }
+                ],
+                nonCore: [
+                    { name: "تربية دينية", max: 20, min: 10 },
+                    { name: "تربية وطنية", max: 20, min: 10 }
+                ]
+            }
+        };
+
+        function generateRandomScore(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(1).replace('.0', '');
+        }
+
+        function renderResultTable(stage) {
+            const table = document.getElementById('resultsTable');
+            table.innerHTML = '';
+
+            // Normalize data access
+            let data = subjectsData[stage];
+            if (!data && subjectsData['primary']) {
+                data = subjectsData['primary'].core ? subjectsData['primary'] : { core: subjectsData['primary'], nonCore: [] };
+            }
+            if (Array.isArray(data)) data = { core: data, nonCore: [] }; // Safety for transition
+
+            // Safety check for core/nonCore existence
+            const coreSubjects = data.core || [];
+            const nonCoreSubjects = data.nonCore || [];
+
+            // Calculate Totals per subject (and Grand Total)
+            let totalMax = 0;
+            let totalMin = 0;
+            let totalScore = 0;
+
+            // Generate scores first to have them ready
+            const coreScores = coreSubjects.map(sub => {
+                const s = parseFloat(generateRandomScore(sub.min, sub.max));
+                totalMax += sub.max;
+                totalMin += sub.min;
+                totalScore += s;
+                return s;
+            });
+
+            const nonCoreScores = nonCoreSubjects.map(sub => {
+                return parseFloat(generateRandomScore(sub.min, sub.max));
+            });
+
+
+            // --- Build Header ---
+            const thead = table.createTHead();
+
+            // Row 1: Group Headers
+            const tr1 = thead.insertRow();
+
+            // "Right" Labels Group (Core) + Label
+            const thCoreGroup = document.createElement('th');
+            thCoreGroup.textContent = "مواد تضاف الى المجموع الكلي";
+            thCoreGroup.colSpan = coreSubjects.length + 1; // +1 for the Row Label column
+            thCoreGroup.style.background = "#00897b";
+            thCoreGroup.style.color = "#fff";
+            tr1.appendChild(thCoreGroup);
+
+            // "Middle" Total
+            const thTotalGroup = document.createElement('th');
+            thTotalGroup.textContent = "المجموع";
+            thTotalGroup.rowSpan = 2;
+            thTotalGroup.className = "total-header"; // Red
+            tr1.appendChild(thTotalGroup);
+
+            // "Left" Non-Core Group
+            if (nonCoreSubjects.length > 0) {
+                const thNonCoreGroup = document.createElement('th');
+                thNonCoreGroup.textContent = "مواد لاتضاف الى المجموع الكلي";
+                thNonCoreGroup.colSpan = nonCoreSubjects.length;
+                thNonCoreGroup.style.background = "#00897b";
+                thNonCoreGroup.style.color = "#fff";
+                tr1.appendChild(thNonCoreGroup);
+            }
+
+            // Row 2: specific subjects
+            const tr2 = thead.insertRow();
+
+            // The "Matrix Label" (المادة)
+            const thLabel = document.createElement('th');
+            thLabel.textContent = "المادة";
+            tr2.appendChild(thLabel);
+
+            // Core Names
+            coreSubjects.forEach(sub => {
+                const th = document.createElement('th');
+                th.textContent = sub.name;
+                tr2.appendChild(th);
+            });
+
+            // Non-Core Names
+            nonCoreSubjects.forEach(sub => {
+                const th = document.createElement('th');
+                th.textContent = sub.name;
+                tr2.appendChild(th);
+            });
+
+
+            // --- Build Body ---
+            const tbody = table.createTBody();
+
+            // Row Max
+            const trMax = tbody.insertRow();
+            const tdMaxL = document.createElement('td'); tdMaxL.textContent = "الكبرى"; tdMaxL.style.background = '#00897b'; tdMaxL.style.color = '#fff'; tdMaxL.style.fontWeight = 'bold'; trMax.appendChild(tdMaxL);
+            coreSubjects.forEach(s => { const td = document.createElement('td'); td.textContent = s.max; trMax.appendChild(td); });
+            const tdTvM = document.createElement('td'); tdTvM.className = 'total-col'; tdTvM.textContent = totalMax; trMax.appendChild(tdTvM);
+            nonCoreSubjects.forEach(s => { const td = document.createElement('td'); td.textContent = s.max; trMax.appendChild(td); });
+
+            // Row Min
+            const trMin = tbody.insertRow();
+            const tdMinL = document.createElement('td'); tdMinL.textContent = "الصغرى"; tdMinL.style.background = '#00897b'; tdMinL.style.color = '#fff'; tdMinL.style.fontWeight = 'bold'; trMin.appendChild(tdMinL);
+            coreSubjects.forEach(s => { const td = document.createElement('td'); td.textContent = s.min; trMin.appendChild(td); });
+            const tdTvMin = document.createElement('td'); tdTvMin.className = 'total-col'; tdTvMin.textContent = totalMin; trMin.appendChild(tdTvMin);
+            nonCoreSubjects.forEach(s => { const td = document.createElement('td'); td.textContent = s.min; trMin.appendChild(td); });
+
+            // Row Grade
+            const trG = tbody.insertRow();
+            const tdGL = document.createElement('td'); tdGL.textContent = "الدرجة"; tdGL.style.background = '#00897b'; tdGL.style.color = '#fff'; tdGL.style.fontWeight = 'bold'; trG.appendChild(tdGL);
+            coreScores.forEach(s => { const td = document.createElement('td'); td.textContent = s; td.className = 'student-score'; trG.appendChild(td); });
+            const tdTvG = document.createElement('td'); tdTvG.className = 'total-col'; tdTvG.textContent = totalScore.toFixed(1).replace('.0', ''); trG.appendChild(tdTvG);
+            nonCoreScores.forEach(s => { const td = document.createElement('td'); td.textContent = s; td.className = 'student-score'; trG.appendChild(td); });
+        }
+
         function searchNow() {
             let idInput = document.getElementById('nid');
             let id = idInput.value.trim();
+            let stageSelect = document.getElementById('stage');
             let gradeSelect = document.getElementById('grade');
             let grade = gradeSelect.value;
             let r = document.getElementById('result');
@@ -839,14 +1017,14 @@
 
             let isValid = true;
 
-            if (id === '') {
+            if (id === '' || id.length !== 14) {
                 // Visual validation for ID
                 idInput.style.borderColor = "#f87171"; // Red border
                 idInput.classList.add('shake-animation');
                 isValid = false;
             }
 
-            if (grade === '') {
+            if (gradeSelect.value === '') {
                 // Visual validation for Grade
                 gradeSelect.style.borderColor = "#f87171"; // Red border
                 gradeSelect.classList.add('shake-animation');
@@ -863,20 +1041,23 @@
             }
 
             // Show loading
-            r.style.display = 'block'; // Make sure it's visible for loading
-            r.innerHTML = '...'; // Minimal loading indicator or graphic
+            r.style.display = 'block';
+            r.innerHTML = '<span style="color:var(--accent-color)">جارِ البحث...</span>';
 
             setTimeout(() => {
                 // Populate result data
                 document.getElementById('student-nid').textContent = id;
-                document.getElementById('resGrade').textContent = gradeSelect.value || "غير محدد";
+                document.getElementById('resGrade').textContent = gradeSelect.value;
+
+                // Render Table based on Stage
+                renderResultTable(stageSelect.value);
 
                 // Toggle visibility
                 document.getElementById('searchCard').classList.add('hidden');
                 document.getElementById('resultCard').classList.remove('hidden');
 
                 // Reset search message
-                r.innerHTML = ''; // Clear loading
+                r.innerHTML = '';
             }, 800);
         }
 
@@ -885,8 +1066,8 @@
 
     <!-- Footer -->
     <footer>
-        <span style="font-size: 1.4rem; font-weight: 900;">© جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2026</span>
-        <div style="margin-top: 4px; font-size: 1.2rem; color: var(--accent-color);">
+        <span style="font-size: 1.3rem; font-weight: 900;">© جميع الحقوق محفوظة — برمجة: يوسف عماد كامل 2026</span>
+        <div style="margin-top: 4px; font-size: 1rem; color: var(--accent-color);">
             إشراف: مس / ماجده — مستر / سيد
         </div>
     </footer>
