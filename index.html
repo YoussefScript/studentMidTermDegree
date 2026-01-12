@@ -807,6 +807,68 @@
 
     <!-- Scripts -->
     <script>
+        // MOCK SHIM FOR LOCAL DEVELOPMENT
+        if (typeof google === 'undefined') {
+            console.warn("Running in local mode - Mocking google.script.run");
+            window.google = {
+                script: {
+                    run: {
+                        withSuccessHandler: function (successCallback) {
+                            return {
+                                withFailureHandler: function (failureCallback) {
+                                    return {
+                                        getStudentData: function (stage, grade, nid) {
+                                            console.log(`Mocking Backend Call: ${stage}, ${grade}, ${nid}`);
+
+                                            // Simulate network delay
+                                            setTimeout(() => {
+                                                // --- DUPLICATE LOGIC FROM code.js FOR LOCAL TESTING ---
+                                                if (!nid || nid.length < 14) {
+                                                    // This path is technically blocked by frontend validation, but just in case
+                                                    if (failureCallback) failureCallback("Error: Invalid ID");
+                                                    return;
+                                                }
+
+                                                // Helper rng
+                                                function score(min, max) { return (Math.random() * (max - min) + min).toFixed(1).replace('.0', ''); }
+
+                                                var mockScores = {};
+                                                // Basic Mocking Logic using existing frontend data structure to be consistent
+                                                // We can access 'subjectsData' because this is running in the window context
+                                                if (subjectsData[stage] && subjectsData[stage][grade]) {
+                                                    let core = subjectsData[stage][grade].core || [];
+                                                    let nonCore = subjectsData[stage][grade].nonCore || [];
+
+                                                    core.forEach(s => mockScores[s.name] = score(s.min, s.max));
+                                                    nonCore.forEach(s => mockScores[s.name] = score(s.min, s.max));
+                                                }
+
+                                                var response = {
+                                                    status: "success",
+                                                    studentName: "محمد أحمد محمود (محاكاة)",
+                                                    schoolName: "الشهيد عمرو شهاب",
+                                                    nid: nid,
+                                                    grade: grade,
+                                                    stage: stage,
+                                                    scores: mockScores
+                                                };
+
+                                                successCallback(response);
+                                            }, 1000);
+                                        }
+                                    }
+                                },
+                                getStudentData: function (stage, grade, nid) {
+                                    // Fallback if no failure handler chain
+                                    this.withSuccessHandler(successCallback).withFailureHandler(() => { }).getStudentData(stage, grade, nid);
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
         const gradesList = {
             primary: [
                 "الاول الابتدائي", "الثاني الابتدائي", "الثالث الابتدائي",
@@ -1026,11 +1088,9 @@
             }
         };
 
-        function generateRandomScore(min, max) {
-            return (Math.random() * (max - min) + min).toFixed(1).replace('.0', '');
-        }
+        /* generateRandomScore removed */
 
-        function renderResultTable(stage, grade) {
+        function renderResultTable(stage, grade, studentData) {
             const table = document.getElementById('resultsTable');
             table.innerHTML = '';
 
@@ -1042,7 +1102,6 @@
                 console.warn('Grade data not found within stage:', stage, grade);
             }
 
-
             // Safety check for core/nonCore existence
             const coreSubjects = data.core || [];
             const nonCoreSubjects = data.nonCore || [];
@@ -1052,9 +1111,16 @@
             let totalMin = 0;
             let totalScore = 0;
 
-            // Generate scores first to have them ready
+            // Map scores from backend data
+            // Expecting studentData.scores to be { "Arabic": 50, ... }
+            const incomingScores = studentData.scores || {};
+
             const coreScores = coreSubjects.map(sub => {
-                const s = parseFloat(generateRandomScore(sub.min, sub.max));
+                let rawVal = incomingScores[sub.name];
+                // Handle missing or invalid
+                let s = parseFloat(rawVal);
+                if (isNaN(s)) s = 0;
+
                 totalMax += sub.max;
                 totalMin += sub.min;
                 totalScore += s;
@@ -1062,9 +1128,11 @@
             });
 
             const nonCoreScores = nonCoreSubjects.map(sub => {
-                return parseFloat(generateRandomScore(sub.min, sub.max));
+                let rawVal = incomingScores[sub.name];
+                let s = parseFloat(rawVal);
+                if (isNaN(s)) s = 0; // Or handle as empty
+                return s;
             });
-
 
             // --- Build Header ---
             const thead = table.createTHead();
@@ -1150,33 +1218,27 @@
             let id = idInput.value.trim();
             let stageSelect = document.getElementById('stage');
             let gradeSelect = document.getElementById('grade');
-            let grade = gradeSelect.value;
-            let r = document.getElementById('result');
 
-            // Reset validation style
+            // Validate Inputs
+            let isValid = true;
+            // Reset Validation
             idInput.style.borderColor = "rgba(255, 255, 255, 0.1)";
             idInput.classList.remove('shake-animation');
             gradeSelect.style.borderColor = "rgba(255, 255, 255, 0.1)";
             gradeSelect.classList.remove('shake-animation');
 
-            let isValid = true;
-
             if (id === '' || id.length !== 14) {
-                // Visual validation for ID
-                idInput.style.borderColor = "#f87171"; // Red border
+                idInput.style.borderColor = "#f87171";
                 idInput.classList.add('shake-animation');
                 isValid = false;
             }
-
             if (gradeSelect.value === '') {
-                // Visual validation for Grade
-                gradeSelect.style.borderColor = "#f87171"; // Red border
+                gradeSelect.style.borderColor = "#f87171";
                 gradeSelect.classList.add('shake-animation');
                 isValid = false;
             }
 
             if (!isValid) {
-                // Remove shake class after animation ends to allow re-trigger
                 setTimeout(() => {
                     idInput.classList.remove('shake-animation');
                     gradeSelect.classList.remove('shake-animation');
@@ -1185,24 +1247,59 @@
             }
 
             // Show loading
+            let r = document.getElementById('result');
             r.style.display = 'block';
             r.innerHTML = '<span style="color:var(--accent-color)">جارِ البحث...</span>';
 
-            setTimeout(() => {
-                // Populate result data
-                document.getElementById('student-nid').textContent = id;
-                document.getElementById('resGrade').textContent = gradeSelect.value;
+            // CALL BACKEND
+            google.script.run
+                .withSuccessHandler(onSearchSuccess)
+                .withFailureHandler(onSearchFailure)
+                .getStudentData(stageSelect.value, gradeSelect.value, id);
+        }
 
-                // Render Table based on Stage and Grade
-                renderResultTable(stageSelect.value, gradeSelect.value);
+        function onSearchSuccess(response) {
+            let r = document.getElementById('result');
 
-                // Toggle visibility
-                document.getElementById('searchCard').classList.add('hidden');
-                document.getElementById('resultCard').classList.remove('hidden');
+            if (!response || response.status !== 'success' || response.error) {
+                // Handle Error
+                let msg = (response && response.error) ? response.error : "لم يتم العثور على بيانات الطالب";
+                r.innerHTML = `<span style="color:#f87171; font-weight:bold;">${msg}</span>`;
+                return;
+            }
 
-                // Reset search message
-                r.innerHTML = '';
-            }, 800);
+            // Populate Student Info
+            document.getElementById('student-nid').textContent = response.nid;
+            document.getElementById('resGrade').textContent = response.grade; // Or response.grade
+            // We might want to update the Name/School if provided by backend
+            if (response.studentName) {
+                // Find the element for name. In current HTML it's static "محمد أحمد محمود", let's update it.
+                // Looking at HTML, it's inside .info-group -> .info-value. 
+                // We need to target specific elements. I will assume we need to add IDs to these elements or traverse.
+                // For now, I'll update the static DOM structures if I can identify them, or just leave as is if no ID.
+                // NOTE: The previous code didn't update name. I'll stick to 'student-nid' and 'resGrade' which have IDs.
+
+                // Let's try to update name if we can find it structurally or add ID.
+                // The first info-value is Name.
+                const infoValues = document.querySelectorAll('.student-info .info-value');
+                if (infoValues.length > 0) infoValues[0].textContent = response.studentName;
+                if (infoValues.length > 3) infoValues[3].textContent = response.schoolName;
+            }
+
+            // Render Table
+            renderResultTable(response.stage, response.grade, response);
+
+            // Toggle visibility
+            document.getElementById('searchCard').classList.add('hidden');
+            document.getElementById('resultCard').classList.remove('hidden');
+
+            // Clear loading
+            r.innerHTML = '';
+        }
+
+        function onSearchFailure(error) {
+            let r = document.getElementById('result');
+            r.innerHTML = `<span style="color:#f87171; font-weight:bold;">خطأ في الاتصال: ${error.message}</span>`;
         }
 
         /* function goBack() removed */
