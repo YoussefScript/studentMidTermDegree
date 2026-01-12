@@ -816,7 +816,9 @@
                 "الاول الاعدادي", "الثاني الاعدادي", "الثالث الاعدادي"
             ],
             secondary: [
-                "الاول الثانوي"
+                "الاول الثانوي",
+                "الثاني الثانوي",
+                "الثالث الثانوي"
             ]
         };
 
@@ -837,50 +839,190 @@
 
         const subjectsData = {
             primary: {
-                core: [
-                    { name: "لغة عربية", max: 100, min: 50 },
-                    { name: "رياضيات", max: 80, min: 40 },
-                    { name: "لغة إنجليزية", max: 60, min: 30 },
-                    { name: "علوم", max: 40, min: 20 },
-                    { name: "دراسات", max: 40, min: 20 }
-                ],
-                nonCore: [
-                    { name: "تربية دينية", max: 40, min: 20 },
-                    { name: "تكنولوجيا", max: 20, min: 10 },
-                    { name: "كت", max: 20, min: 10 }
-                ]
+                "الاول الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                },
+                "الثاني الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                },
+                "الثالث الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                },
+                "الرابع الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                },
+                "الخامس الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                },
+                "السادس الابتدائي": {
+                    core: [
+                        { name: "لغة عربية", max: 100, min: 50 },
+                        { name: "رياضيات", max: 80, min: 40 },
+                        { name: "لغة إنجليزية", max: 60, min: 30 },
+                        { name: "علوم", max: 40, min: 20 },
+                        { name: "دراسات", max: 40, min: 20 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 40, min: 20 },
+                        { name: "تكنولوجيا", max: 20, min: 10 },
+                        { name: "كت", max: 20, min: 10 }
+                    ]
+                }
             },
             preparatory: {
-                core: [
-                    { name: "عربي", max: 40, min: 20 },
-                    { name: "انجليزي", max: 30, min: 15 },
-                    { name: "دراسات", max: 20, min: 10 },
-                    { name: "جبر", max: 15, min: 7.5 },
-                    { name: "هندسة", max: 15, min: 7.5 },
-                    { name: "علوم", max: 20, min: 10 }
-                ],
-                nonCore: [
-                    { name: "تربية فنية", max: 10, min: 5 },
-                    { name: "حاسب آلي", max: 10, min: 5 },
-                    { name: "تربية دينية", max: 20, min: 10 },
-                    { name: "مستوى 1", max: 25, min: 12.5 },
-                    { name: "مستوى 2", max: 20, min: 10 }
-                ]
+                "الاول الاعدادي": {
+                    core: [
+                        { name: "عربي", max: 40, min: 20 },
+                        { name: "انجليزي", max: 30, min: 15 },
+                        { name: "دراسات", max: 20, min: 10 },
+                        { name: "جبر", max: 15, min: 7.5 },
+                        { name: "هندسة", max: 15, min: 7.5 },
+                        { name: "علوم", max: 20, min: 10 }
+                    ],
+                    nonCore: [
+                        { name: "تربية فنية", max: 10, min: 5 },
+                        { name: "حاسب آلي", max: 10, min: 5 },
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "مستوى 1", max: 25, min: 12.5 },
+                        { name: "مستوى 2", max: 20, min: 10 }
+                    ]
+                },
+                "الثاني الاعدادي": {
+                    core: [
+                        { name: "عربي", max: 40, min: 20 },
+                        { name: "انجليزي", max: 30, min: 15 },
+                        { name: "دراسات", max: 20, min: 10 },
+                        { name: "جبر", max: 15, min: 7.5 },
+                        { name: "هندسة", max: 15, min: 7.5 },
+                        { name: "علوم", max: 20, min: 10 }
+                    ],
+                    nonCore: [
+                        { name: "تربية فنية", max: 10, min: 5 },
+                        { name: "حاسب آلي", max: 10, min: 5 },
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "مستوى 1", max: 25, min: 12.5 },
+                        { name: "مستوى 2", max: 20, min: 10 }
+                    ]
+                },
+                "الثالث الاعدادي": {
+                    core: [
+                        { name: "عربي", max: 40, min: 20 },
+                        { name: "انجليزي", max: 30, min: 15 },
+                        { name: "دراسات", max: 20, min: 10 },
+                        { name: "جبر", max: 15, min: 7.5 },
+                        { name: "هندسة", max: 15, min: 7.5 },
+                        { name: "علوم", max: 20, min: 10 }
+                    ],
+                    nonCore: [
+                        { name: "تربية فنية", max: 10, min: 5 },
+                        { name: "حاسب آلي", max: 10, min: 5 },
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "مستوى 1", max: 25, min: 12.5 },
+                        { name: "مستوى 2", max: 20, min: 10 }
+                    ]
+                }
             },
             secondary: {
-                core: [
-                    { name: "لغة عربية", max: 50, min: 25 },
-                    { name: "أجنبية 1", max: 50, min: 25 },
-                    { name: "أجنبية 2", max: 40, min: 20 },
-                    { name: "بحتة", max: 60, min: 30 },
-                    { name: "تطبيقية", max: 60, min: 30 },
-                    { name: "فيزياء", max: 60, min: 30 },
-                    { name: "كيمياء", max: 60, min: 30 }
-                ],
-                nonCore: [
-                    { name: "تربية دينية", max: 20, min: 10 },
-                    { name: "تربية وطنية", max: 20, min: 10 }
-                ]
+                "الاول الثانوي": {
+                    core: [
+                        { name: "لغة عربية", max: 50, min: 25 },
+                        { name: "أجنبية 1", max: 50, min: 25 },
+                        { name: "أجنبية 2", max: 40, min: 20 },
+                        { name: "بحتة", max: 60, min: 30 },
+                        { name: "تطبيقية", max: 60, min: 30 },
+                        { name: "فيزياء", max: 60, min: 30 },
+                        { name: "كيمياء", max: 60, min: 30 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "تربية وطنية", max: 20, min: 10 }
+                    ]
+                },
+                "الثاني الثانوي": {
+                    core: [
+                        { name: "لغة عربية", max: 50, min: 25 },
+                        { name: "أجنبية 1", max: 50, min: 25 },
+                        { name: "أجنبية 2", max: 40, min: 20 },
+                        { name: "بحتة", max: 60, min: 30 },
+                        { name: "تطبيقية", max: 60, min: 30 },
+                        { name: "فيزياء", max: 60, min: 30 },
+                        { name: "كيمياء", max: 60, min: 30 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "تربية وطنية", max: 20, min: 10 }
+                    ]
+                },
+                "الثالث الثانوي": {
+                    core: [
+                        { name: "لغة عربية", max: 50, min: 25 },
+                        { name: "أجنبية 1", max: 50, min: 25 },
+                        { name: "أجنبية 2", max: 40, min: 20 },
+                        { name: "بحتة", max: 60, min: 30 },
+                        { name: "تطبيقية", max: 60, min: 30 },
+                        { name: "فيزياء", max: 60, min: 30 },
+                        { name: "كيمياء", max: 60, min: 30 }
+                    ],
+                    nonCore: [
+                        { name: "تربية دينية", max: 20, min: 10 },
+                        { name: "تربية وطنية", max: 20, min: 10 }
+                    ]
+                }
             }
         };
 
@@ -888,16 +1030,18 @@
             return (Math.random() * (max - min) + min).toFixed(1).replace('.0', '');
         }
 
-        function renderResultTable(stage) {
+        function renderResultTable(stage, grade) {
             const table = document.getElementById('resultsTable');
             table.innerHTML = '';
 
             // Normalize data access
-            let data = subjectsData[stage];
-            if (!data && subjectsData['primary']) {
-                data = subjectsData['primary'].core ? subjectsData['primary'] : { core: subjectsData['primary'], nonCore: [] };
+            let data = (subjectsData[stage] && subjectsData[stage][grade]) ? subjectsData[stage][grade] : { core: [], nonCore: [] };
+            if (!subjectsData[stage]) {
+                console.warn('Stage data not found:', stage);
+            } else if (!subjectsData[stage][grade]) {
+                console.warn('Grade data not found within stage:', stage, grade);
             }
-            if (Array.isArray(data)) data = { core: data, nonCore: [] }; // Safety for transition
+
 
             // Safety check for core/nonCore existence
             const coreSubjects = data.core || [];
@@ -1049,8 +1193,8 @@
                 document.getElementById('student-nid').textContent = id;
                 document.getElementById('resGrade').textContent = gradeSelect.value;
 
-                // Render Table based on Stage
-                renderResultTable(stageSelect.value);
+                // Render Table based on Stage and Grade
+                renderResultTable(stageSelect.value, gradeSelect.value);
 
                 // Toggle visibility
                 document.getElementById('searchCard').classList.add('hidden');
