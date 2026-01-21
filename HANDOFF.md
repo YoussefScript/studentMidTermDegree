@@ -23,7 +23,7 @@ This project is a Google Apps Script Web App designed to let students check thei
 The user ("Youssef") will provide an Excel file/Google Sheet later. Your specific task is to replace the mock logic in `code.js` with real SpreadsheetApp logic.
 
 ### 1. The Data Contract
-The frontend expects a JSON response from `getStudentData` in this exact format:
+The frontend expects a JSON response from `getStudentData` in this mabye format:
 ```json
 {
   "status": "success",
