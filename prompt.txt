@@ -1,0 +1,29 @@
+**Subject:** Integrating Excel Data into Student Degree Project - STRICT Data Integrity
+
+Hi! I am continuing work on the "Student Degree Inquiry System" project. Please start by reading the **`HANDOFF.md`** file in the root directory to understand the project architecture.
+
+**My Goal:**
+I am now connecting the real Excel/Google Sheet file. You need to update the `getStudentData()` function in `code.js` to fetch real data.
+
+**📂 FILE STRUCTURE (Crucial Context):**
+*   **Multiple Sheets:** The file contains separate sheets for each Grade (e.g., a sheet for "Primary 1", a sheet for "Primary 2", etc.). You must ensure the code selects the correct sheet based on the user's input.
+*   **Data Layout:** You must look at the file to understand exactly where the "Core" subjects and "Non-Core" subjects are. They might be grouped differently.
+
+**🛑 STEP 1: INSPECT THE FILE**
+Before writing code, you must look at the provided file (or ask me for the specific header row) to confirm:
+1.  **Headers:** Which row holds the subject names? (Is it Row 1? Row 2?)
+2.  **Columns:** exactly what are the Header Names for "National ID", "Student Name", "Arabic", "Math", "Total", etc.
+3.  **Structure:** Are there merged cells? Are there hidden columns?
+
+**⚠️ STEP 2: PREVENT MISMATCHES (Zero Tolerance for Errors)**
+I have over **500 students**. It is unacceptable for a student to see someone else's grades (e.g., Youssef getting Mark's score).
+1.  **Row Finding:** You must search the **National ID Column** to find the student's specific row. never rely on row numbers guessing.
+2.  **Dynamic Column Mapping:**
+    *   Do **NOT** hardcode column numbers (e.g., `row[4]`). Use **Header Name Matching**.
+    *   Your code must find the column named "Arabic" (or whatever it is called in the sheet) and get the index.
+    *   Use that index to pull the grade. This ensures that even if I change the column order, the code won't break.
+
+**Here is my Excel/Sheet info:**
+folder named StudentDegree id contains the file :-
+
+هنا
