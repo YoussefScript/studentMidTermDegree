@@ -34,5 +34,3 @@ Open result.html in browser | افتح الملف في المتصفح مباشر
 
 Or connect to Google Apps Script backend | أو ربطه مع Google Apps Script للبيانات الحقيقية
 
-Author | المؤلف
-Youssef Emad Kamel – 2026 | يوسف عماد كامل – 2026
